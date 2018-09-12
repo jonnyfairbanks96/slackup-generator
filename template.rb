@@ -37,19 +37,28 @@ Jonny's Slackup
   end
 
   def self.post_to_slack
-    uri = URI.parse("Your Slack Web Hook")
-    request = Net::HTTP::Post.new(uri)
-    request.content_type = "application/json"
-    request.body = JSON.dump({
-      "text" => "#{self.format(@@ticket, @@pr, @@deploy, @@concerns)}"
-    })
+    print "#{self.format(@@ticket, @@pr, @@deploy, @@concerns)}\n Would you like to post to slack? (y/n)"
+    response = gets.chomp
 
-    req_options = {
-      use_ssl: uri.scheme == "https",
-    }
+    if response.downcase == "y"
+      uri = URI.parse("Your Slack Web Hook")
+      request = Net::HTTP::Post.new(uri)
+      request.content_type = "application/json"
+      request.body = JSON.dump({
+        "text" => "#{self.format(@@ticket, @@pr, @@deploy, @@concerns)}"
+      })
 
-    response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
-      http.request(request)
+      req_options = {
+        use_ssl: uri.scheme == "https",
+      }
+
+      response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
+        http.request(request)
+      end
+    elsif response.downcase == "n"
+      puts "Aborted"
+    else
+      puts "Invalid entry aborted."
     end
   end
 end
