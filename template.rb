@@ -17,27 +17,14 @@ class SlackUp
 
     print "Concerns seperate by periods: "
     concerns = gets.chomp
-    @@concerns = concerns.split('.').map { |con| "\"#{con.strip}\"" }
-  end
 
-  def self.format(ticket, pr, deploy, concerns)
-"
-```
-Jonny's Slackup
-{
-  \"ticket\": #{ticket},
-  \"pr\": #{pr},
-  \"deploy\": #{deploy},
-  \"concerns\": [
-      #{concerns.join(",\n      ")}
-  ]
-}
-```
-"
+    @@concerns = concerns.split(".").map { |con| "\"#{con.strip}\"" }
+    @@slack_up = self.format(@@ticket, @@pr, @@deploy, @@concerns) 
   end
 
   def self.post_to_slack
-    print "#{self.format(@@ticket, @@pr, @@deploy, @@concerns)}\n Would you like to post to slack? (y/n)"
+    print "#{@@slack_up}\nWould you like to post to slack? (y/n): "
+
     response = gets.chomp
 
     if response.downcase == "y"
@@ -45,7 +32,7 @@ Jonny's Slackup
       request = Net::HTTP::Post.new(uri)
       request.content_type = "application/json"
       request.body = JSON.dump({
-        "text" => "#{self.format(@@ticket, @@pr, @@deploy, @@concerns)}"
+        "text" => "#{@@slack_up}"
       })
 
       req_options = {
@@ -60,6 +47,24 @@ Jonny's Slackup
     else
       puts "Invalid entry aborted."
     end
+  end
+
+  private
+
+  def self.format(ticket, pr, deploy, concerns)
+"
+```
+Jonny's Slackup
+{
+  \"ticket\": \"#{ticket}\",
+  \"pr\": \"#{pr}\",
+  \"deploy\": \"#{deploy}\",
+  \"concerns\": [
+      #{concerns.join(",\n      ")}
+  ]
+}
+```
+"
   end
 end
 
