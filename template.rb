@@ -15,11 +15,13 @@ class SlackUp
     print "Deploy: "
     @@deploy = gets.chomp
 
-    print "Concerns seperate by periods: "
-    concerns = gets.chomp
+    print "Title: "
+    @@title = gets.chomp
 
-    @@concerns = concerns.split(".").map { |con| "\"#{con.strip}\"" }
-    @@slack_up = self.format(@@ticket, @@pr, @@deploy, @@concerns) 
+    print "Update: "
+    @@concerns = gets.chomp
+
+    @@slack_up = self.format(@@ticket, @@pr, @@title, @@deploy, @@concerns)
   end
 
   def self.post_to_slack
@@ -51,19 +53,14 @@ class SlackUp
 
   private
 
-  def self.format(ticket, pr, deploy, concerns)
+  def self.format(ticket, pr, title, deploy, concerns)
 "
-```
 Jonny's Slackup
-{
-  \"ticket\": \"#{ticket}\",
-  \"pr\": \"#{pr}\",
-  \"deploy\": \"#{deploy}\",
-  \"concerns\": [
-      #{concerns.join(",\n      ")}
-  ]
-}
-```
+*Ticket*: #{ticket}
+*PR*:     #{pr}
+*Title*:  #{title}
+*Deploy*: #{deploy}
+*Update*: #{concerns}
 "
   end
 end
