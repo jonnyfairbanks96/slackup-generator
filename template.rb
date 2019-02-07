@@ -7,9 +7,13 @@ require 'json'
 class SlackUp
   def self.render
     time = Time.now
-    system("cp", "slackup_template.txt", ".slackup_#{time}.txt")
-    system("nvim", ".slackup_#{time}.txt")
-    system("cat", ".slackup_#{time}.txt")
+    path = File.dirname(__FILE__)
+    template = File.expand_path("#{path}/slackup_template.txt")
+    slack_up = File.expand_path("#{path}/.slackup_#{time}.txt")
+
+    system("cp", template, slack_up)
+    system("nvim", slack_up)
+    system("cat", slack_up)
   end
 
   # def self.post_to_slack
