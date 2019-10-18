@@ -1,4 +1,21 @@
-Jonny's Slackup
+*Ticket*:
+*PR*:
+*Title*:
+*Deploy*:
+*Update*:
+
+*Ticket*:
+*PR*:
+*Title*:
+*Deploy*:
+*Update*:
+
+*Ticket*:
+*PR*:
+*Title*:
+*Deploy*:
+*Update*:
+
 *Ticket*:
 *PR*:
 *Title*:
